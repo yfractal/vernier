@@ -99,14 +99,15 @@ class TimeStamp {
     // SleepUntil a specified timestamp
     // Highly accurate manual sleep time
     static void SleepUntil(const TimeStamp &target_time) {
-        if (target_time.zero()) return;
-        struct timespec ts = target_time.timespec();
+        usleep(1000);
+        // if (target_time.zero()) return;
+        // struct timespec ts = target_time.timespec();
 
-        int res;
-        do {
-            // do nothing until it's time :)
-            sleep(0);
-        } while (target_time > TimeStamp::Now());
+        // int res;
+        // do {
+        //     // do nothing until it's time :)
+        //     sleep(0);
+        // } while (target_time > TimeStamp::Now());
     }
 
     static TimeStamp from_seconds(uint64_t s) {
