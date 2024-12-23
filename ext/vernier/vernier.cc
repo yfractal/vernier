@@ -1834,7 +1834,7 @@ class TimeCollector : public BaseCollector {
         this->threads.resumed(rb_thread_current());
 
         thread_hook = rb_internal_thread_add_event_hook(internal_thread_event_cb, RUBY_INTERNAL_THREAD_EVENT_MASK, this);
-        rb_add_event_hook(internal_gc_event_cb, RUBY_INTERNAL_EVENTS, PTR2NUM((void *)this));
+        // rb_add_event_hook(internal_gc_event_cb, RUBY_INTERNAL_EVENTS, PTR2NUM((void *)this));
         rb_add_event_hook(internal_thread_event_cb, RUBY_NORMAL_EVENTS, PTR2NUM((void *)this));
 
         return true;
@@ -1854,7 +1854,7 @@ class TimeCollector : public BaseCollector {
         }
 
         rb_internal_thread_remove_event_hook(thread_hook);
-        rb_remove_event_hook(internal_gc_event_cb);
+        // rb_remove_event_hook(internal_gc_event_cb);
         rb_remove_event_hook(internal_thread_event_cb);
 
         stack_table->finalize();
