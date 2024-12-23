@@ -99,14 +99,15 @@ class TimeStamp {
     // SleepUntil a specified timestamp
     // Highly accurate manual sleep time
     static void SleepUntil(const TimeStamp &target_time) {
-        if (target_time.zero()) return;
-        struct timespec ts = target_time.timespec();
+        usleep(1000);
+        // if (target_time.zero()) return;
+        // struct timespec ts = target_time.timespec();
 
-        int res;
-        do {
-            // do nothing until it's time :)
-            sleep(0);
-        } while (target_time > TimeStamp::Now());
+        // int res;
+        // do {
+        //     // do nothing until it's time :)
+        //     sleep(0);
+        // } while (target_time > TimeStamp::Now());
     }
 
     static TimeStamp from_seconds(uint64_t s) {
@@ -1833,7 +1834,7 @@ class TimeCollector : public BaseCollector {
         this->threads.resumed(rb_thread_current());
 
         thread_hook = rb_internal_thread_add_event_hook(internal_thread_event_cb, RUBY_INTERNAL_THREAD_EVENT_MASK, this);
-        rb_add_event_hook(internal_gc_event_cb, RUBY_INTERNAL_EVENTS, PTR2NUM((void *)this));
+        // rb_add_event_hook(internal_gc_event_cb, RUBY_INTERNAL_EVENTS, PTR2NUM((void *)this));
         rb_add_event_hook(internal_thread_event_cb, RUBY_NORMAL_EVENTS, PTR2NUM((void *)this));
 
         return true;
@@ -1853,7 +1854,7 @@ class TimeCollector : public BaseCollector {
         }
 
         rb_internal_thread_remove_event_hook(thread_hook);
-        rb_remove_event_hook(internal_gc_event_cb);
+        // rb_remove_event_hook(internal_gc_event_cb);
         rb_remove_event_hook(internal_thread_event_cb);
 
         stack_table->finalize();
