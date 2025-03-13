@@ -1216,6 +1216,7 @@ class ThreadTable {
             pthread_t pthread_id = pthread_self();
 
             //fprintf(stderr, "th %p (tid: %i) from %s to %s\n", (void *)th, native_tid, gvl_event_name(state), gvl_event_name(new_state));
+            VALUE thread_name = rb_funcall(th, rb_intern("name"), 0);
 
             for (auto &threadptr : list) {
                 auto &thread = *threadptr;
@@ -1244,8 +1245,16 @@ class ThreadTable {
                 }
             }
 
-            //fprintf(stderr, "NEW THREAD: th: %p, state: %i\n", th, new_state);
-            list.push_back(std::make_unique<Thread>(new_state, pthread_self(), th));
+            if (!NIL_P(thread_name)) {
+                const char* name = StringValueCStr(thread_name);
+                if (strstr(name, "puma srv tp") != NULL) {
+                    fprintf(stderr, "pushed to list");
+                    fprintf(stderr, "[vernier] Thread name: %s\n", name);
+                    list.push_back(std::make_unique<Thread>(new_state, pthread_self(), th));
+                }
+            } else {
+                // fprintf(stderr, "Thread name is nil\n");
+            }
         }
 
         bool thread_equal(VALUE a, VALUE b) {
@@ -1653,6 +1662,7 @@ class TimeCollector : public BaseCollector {
     }
 
     void sample_thread_run() {
+        fprintf(stderr, "[vernier] sample_thread_run");
         LiveSample sample;
 
         TimeStamp next_sample_schedule = TimeStamp::Now();
